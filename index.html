@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MultiLevelLinkage</title>
+</head>
+<body>
+	<select id="s" class="c">
+		<option>2121231231</option>
+	</select>
+	<select  class="c">
+		<option>2121231231</option>
+	</select>
+	<div id="d"></div>
+</body>
+<script type="text/javascript" src="MultiLevelLinkage.js"></script>
+<script type="text/javascript">
+	var data={
+	//一级select
+	selectDoc:".c",//doc对象,id..等字符串
+	//一级select 的option选项
+	option:[
+	{},
+	{},
+	{}
+	]
+}
+var l=MultiLevelLinkage.init(data);
+console.log(l)
+</script>
+</html>
