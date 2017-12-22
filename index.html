@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -8,24 +8,51 @@
 	<select id="s" class="c">
 		<option>2121231231</option>
 	</select>
-	<select  class="c">
+	<select  class="c2">
+		<option>2121231231</option>
+	</select>
+	<select  class="c3">
+		<option>2121231231</option>
+	</select>
+	<select  class="c4">
+		<option>2121231231</option>
+	</select>
+	<select  class="c5">
 		<option>2121231231</option>
 	</select>
 	<div id="d"></div>
 </body>
 <script type="text/javascript" src="MultiLevelLinkage.js"></script>
 <script type="text/javascript">
+
+
+
 	var data={
 	//一级select
+	defaultText:"----请选择---",//提示的文字
 	selectDoc:".c",//doc对象,id..等字符串
 	//一级select 的option选项
-	option:[
-	{},
-	{},
-	{}
-	]
+	options:[
+	{
+		text:"122222",value:222222222,
+		rel:[//二级select
+			{defaultText:"请选择",selectDoc:".c2",
+				options:[{text:"111111",value:123123123,
+						rel:[{selectDoc:".c3",text:"3333333",value:3333333}]
+					},
+					{text:"4444",value:44444,
+						rel:[{selectDoc:".c4",text:"4444",value:4444,
+								options:[{text:"333333",value:123123123,
+									rel:[{selectDoc:".c5",text:"55555555",value:55555555}]
+									}]
+							}]
+					}]
+			}]
+	},
+	{text:"111111",value:123123123}]
 }
 var l=MultiLevelLinkage.init(data);
+//MultiLevelLinkage.init(data);
 console.log(l)
 </script>
 </html>
