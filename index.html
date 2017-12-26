@@ -38,18 +38,25 @@
 		rel:[//二级select
 			{defaultText:"请选择",selectDoc:".c2",
 				options:[{text:"111111",value:123123123,
-						rel:[{selectDoc:".c3",text:"3333333",value:3333333}]
+						rel:[{selectDoc:".c3",text:"3333333",value:3333333,
+							  options:[{text:"cccc3333",value:3333}]
+								}//没设置options 不填充
+							]
 					},
 					{text:"4444",value:44444,
 						rel:[{selectDoc:".c4",text:"4444",value:4444,
 								options:[{text:"333333",value:123123123,
-									rel:[{selectDoc:".c5",text:"55555555",value:55555555}]
+									rel:[{selectDoc:".c5",text:"55555555",value:55555555}//没设置options 			不填充
+										]
 									}]
 							}]
-					}]
+					}
+					,						
+					{text:"2222",value:2}
+					]
 			}]
 	},
-	{text:"111111",value:123123123}]
+	{text:"------",value:10,rel:[{selectDoc:".c2"}]}]
 }
 var l=MultiLevelLinkage.init(data);
 //MultiLevelLinkage.init(data);

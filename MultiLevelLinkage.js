@@ -1,29 +1,33 @@
 var MultiLevelLinkage;
 !(function(){
+if(isIE(6)||isIE(7)){
+	throw "没救了,等死吧,告辞";
+}
 if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/){ var len = this.length >>> 0; var from = Number(arguments[1]) || 0; from = (from < 0) ? Math.ceil(from) : Math.floor(from); if (from < 0) from += len; for (; from < len; from++) { if (from in this && this[from] === elt) return from; } return -1; }; }
 	function Linkage(){
-		if(isIE(6)||isIE(7)){
-			alert("等死吧,没救了,告辞");
-		}
-		this.defaultText="请选择";
-	}
 
+	}
 	function _init(opt){
-		if(!opt.options||opt.options.length===0){throw "请设置options"}
-		this.data=opt.options;
-		this.ele=getDoc(opt.selectDoc);
-		if(!this.ele){throw "没有获取到select,1.请输出正确的选着器"}
-		if(!this.ele.getAttribute("init")){this.ele.setAttribute("init",true)}
-		else{throw "重复绑定"}
-		clear(this.ele);
-		this.selectArr=getSelectDoc(this,opt);
-		createdefaultText(this,opt);
-		fillOption(this,this.data);
+		if(!opt.data||!checkObject(opt.data)){throw "请设置data";}
+		if(!opt.select||opt.select.length===0){throw "请设置select";}
+		this.defaultText=opt.defaultText||"请选择";
+		this.datas=opt.data;
+		this.eles=getDoc(opt.select);
+		if(this.eles.length===0){throw "没有获取到select";}
+		checkReapet(this);
+		clear(this);
+		createdefaultText(this);
+		fillRoot(this);
+		addEvent(this,this.eles[0],"click",function(self,that,e){
+			l(that.eles.indexOf(self));
+		});
 		return this;
 	}
 	//清空option
-	function clear(ele){
-		ele.innerHTML="";
+	function clear(that){
+		for (var i = 0; i < that.eles.length; i++) {
+			that.eles[i].innerHTML="";
+		}
 	}
 	//浏览器版本检测
 	function  isIE (ver){
@@ -33,19 +37,25 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 	}
 	//获取是select
 	function getDoc(ele){
-		if(typeof ele==="string"){
-			var e=document.querySelector(ele)
+		var arr=[]
+		for (var i = 0; i < ele.length; i++) {
+			if(typeof ele[i]==="string"){
+			var e=document.querySelector(ele[i])
 			if (e.nodeName.toLocaleLowerCase()==="select") {
-				return e;
+				if(arr.indexOf(e)===-1){arr.push(e);}
 			}
-		}else if (ele.nodeName.toLocaleLowerCase()==="select") {
-			return ele;
+			}else if (ele[i].nodeName.toLocaleLowerCase()==="select") {
+			 	if(arr.indexOf(e)===-1){arr.push(ele[i]);}
+			}	
 		}
+		return arr;
 	}
 	//创建defaultText
-	function  createdefaultText(context,data){
-		var defaultText=data.defaultText||context.defaultText;
-		context.ele.add(createOption('option',defaultText));
+	function  createdefaultText(that,data){
+		var defaultText=that.defaultText;
+		for (var i = 0; i < that.eles.length; i++) {
+			that.eles[i].add(createOption('option',defaultText));
+		}
 	}
 	//创建option
 	function createOption(type,text,val){
@@ -54,12 +64,19 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 		option.text=text;
 		return option;
 	}
-	//填充options
-	function fillOption(that,arr){
-		if(arr.length===0){return ;}
-		for (var i = 0; i < arr.length; i++) {
-			l(arr[i]);
+	//填充最深层select
+	function fillRoot(that){
+		var datas=that.datas;
+		var rootSele=that.eles[0];
+		for(k in datas){
+			if (datas[k]) {
+				fill(rootSele,datas[k].text,datas[k].value);
+			}
 		}
+	}
+	//填充option
+	function fill(ele,text,value){
+		ele.add(createOption('option',text,value));
 	}
 	//数组转为对象
 	function arrToObj(data){
@@ -69,28 +86,29 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 		}
 		return o;
 	}
-	//获取select arr
-	function getSelectDoc(that,data){
-		var arr=[]; 
-		arr.push(getDoc(data.selectDoc));//第一级select
-		function get(data){
-			var options=data.options;
-			if(options){
-				for (var i = 0; i < options.length; i++) {
-					var rel=options[i].rel
-					if(rel){
-						for (var j = 0; j < rel.length; j++) {
-							arr.push(getDoc(rel[j].selectDoc));
-							get(rel[j]);
-						}
-					}else{return;}
-				}
-			}else{
-				return;
-			}
+	//监测select有没重复绑定
+	function checkReapet(that){
+		for (var i = 0; i < that.eles.length; i++) {
+			if(!that.eles[i].getAttribute("init")){that.eles[i].setAttribute("init",true)}
+			else{throw "重复绑定";}
 		}
-		get(data);
-		return arr
+	}
+	function checkObject(obj){for(k in obj){return !!obj[k];}}
+	//绑定事件
+	function addEvent(that,ele,type,fn){
+		if(ele.addEventListener){
+			ele.addEventListener(type,function(e){
+				var e=e||window.event;
+				var currentSelect=e.srcElement||e.target;
+				fn(currentSelect,that,e);
+			},false);
+		}else if(ele.attachEvent){
+			ele.attachEvent("on"+type,function(e){
+				var e=e||window.event; 
+				var currentSelect=e.srcElement||e.target;
+				fn(currentSelect,that,e);
+			});
+		}
 	}
 	Linkage.prototype.init=_init;
 

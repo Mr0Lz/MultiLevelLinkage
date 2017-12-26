@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>MultiLevelLinkage</title>
+</head>
+<body>
+	<select id="s" class="c">
+		<option>2121231231</option>
+	</select>
+	<select  class="c2">
+		<option>2121231231</option>
+	</select>
+	<select  class="c3">
+		<option>2121231231</option>
+	</select>
+	<select  class="c4">
+		<option>2121231231</option>
+	</select>
+	<select  class="c5">
+		<option>2121231231</option>
+	</select>
+	<div id="d">sadfasfsadfasd</div>
+</body>
+<script type="text/javascript" src="MultiLevelLinkage.js"></script>
+<script type="text/javascript">
+
+						var data1 = {
+							1: {text: '蔬菜', value:100,cell: { 10: {text: '菠菜', value: 4 }, 11: {text: '茄子', value: 5} }
+							},
+							2: {text: '水果asd', 
+								cell: { 
+									20: {text: '苹果', cell: {201: {text: '红富士', value: 20}  } } ,
+									21: {text: '桃', cell: { 210: {text: '猕猴桃', value: 30}, 211: {text: '油桃', value: 31}, 212: {text: '蟠桃', priece: 32} }
+									}
+								}
+							},
+							3: {text: '粮食',  value:300,
+								cell: { 
+									30: {text: '水稻', 	cell: {	301: {text: '大米', cell: {3001: {text: '五常香米', value: 50}} } } 	} 
+								}
+							}
+						};
+						
+						var opts = {
+								data: data1,
+								//data:{},
+								select: ["#s",".c",".c2",document.getElementById('d'),".c3",".c4",".c5"]//select数组只能是select 数组 不可以重复  第一个是最上层的select
+						};
+
+var l=MultiLevelLinkage.init(opts);
+//MultiLevelLinkage.init(data);
+
+var d=document.getElementById("s");
+d.onclick=function(){
+	console.log(333)
+}
+d.onclick=function(){
+	console.log(4444)
+}
+// d.onchange=function(){
+// 	console.log(this.value);
+// 	console.log(this);
+// }
+addEvent({},d,"click",function(){
+	console.log(0000)
+})
+
+function addEvent(that,ele,type,fn){
+		if(ele.addEventListener){
+			ele.addEventListener(type,function(e){
+				var e=e||window.event;
+				console.log(e,"32");
+				fn();
+			},false);
+		}else if(ele.attachEvent){
+			ele.attachEvent("on"+type,function(e){
+				var e=e||window.event;
+				console.log(e,"ie");
+				fn();
+			});
+		}
+	}
+
+var div=document.querySelector("#d");
+ div.onclick=function(){
+ 	d.click();
+ }
+</script>
+</html>
