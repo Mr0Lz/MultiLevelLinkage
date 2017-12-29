@@ -19,14 +19,12 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 		clear(this.eles);
 		createdefaultText(this.eles,this.defaultText);
 		initSele(this.eles[0],this.datas);
-		addEvent(this,this.eles[0],"change",function(self,that,e){
-			changeEvent(self,that,that.datas,e);
-		});
+		addEvent(this,this.eles[0],"change",eventcallback);
 		return this;
 	}
 	//清空option
 	function clear(ele,end,filter){
-		for (var i = end?end:0; i < ele.length; i++) {
+		for (var i = end!==undefined?end:0; i < ele.length; i++) {
 			if(filter!==undefined&&(ele.indexOf(filter)!==-1||i===filter)){continue;}
 			ele[i].innerHTML="";
 		}
@@ -53,8 +51,8 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 		return arr;
 	}
 	//创建defaultText
-	function  createdefaultText(ele,text,filter){
-		for (var i = 0; i < ele.length; i++) {
+	function  createdefaultText(ele,text,end,filter){
+		for (var i = end!==undefined?end:0; i < ele.length; i++) {
 			if(filter!==undefined&&(ele.indexOf(filter)!==-1||i===filter)){continue;}
 			ele[i].add(createOption('option',text));
 		}
@@ -69,7 +67,7 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 	}
 	//初始化select
 	function initSele(ele,datas){
-		for(k in datas){
+		for( var k in datas){
 			if (!Object.prototype.hasOwnProperty.call(datas,k)){continue;}
 			if (datas[k]) {fill(ele,datas[k].text,datas[k].value,k);}
 		}
@@ -85,7 +83,7 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 			else{throw "重复绑定";}
 		}
 	}
-	function checkObject(obj){for(k in obj){
+	function checkObject(obj){for(var k in obj){
 		if (!Object.prototype.hasOwnProperty.call(obj,k)){continue;}return !!obj[k];}
 	}
 	//绑定事件
@@ -104,29 +102,52 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 			});
 		}
 	}
+	//删除事件
+	function removeEvent(eleArr,start,type,fn){
+		for (var i=start; i<eleArr.length;i++) {
+			if(eleArr[i].removeEventListener){
+				eleArr[i].removeEventListener(type,fn);
+			}else if(eleArr[i].detachEvent){
+				eleArr[i].detachEvent("on"+type,fn)
+			}
+		}
+	}
+	//eventcallback
+	function eventcallback(self,that,e){
+		changeEvent(self,that,that.datas,e);
+	}
+	//获取datas数据
+	function getData(index,that){
+		var data=that.datas;		
+		for (var i=1 ; i<=index; i++) {
+			var ele=that.eles[i-1];
+			var key=ele.options[ele.selectedIndex].getAttribute("d-k");
+			if(!key){return false;}
+			data=data[key].cell;
+			if(!data){return false;}
+		}
+		return data
+		l(index,data);		
+	}
 	//change事件fn
 	function changeEvent(self,that,datas,e){
 		var index=that.eles.indexOf(self);
 		var nextSele=that.eles[index+1];
-		var key=self.options[self.selectedIndex].getAttribute("d-k");
-		var cell=that.preData?that.preData[key].cell:datas[key].cell;
-		if(!cell){clear(that.eles,index);
-				  createdefaultText(that.eles,that.defaultText);
-				  return;
+		if(nextSele===undefined){return;}//已经是最后一级的selec
+		var data=getData(index+1,that);
+		if(!data){clear(that.eles,index+1);
+				  createdefaultText(that.eles,that.defaultText,index+1);
+				  removeEvent(that.eles,index===0?1:index,"change",eventcallback);
 				}
-		clear([nextSele]);
-		createdefaultText([nextSele],that.defaultText);
-		initSele(nextSele,cell);
-		addEvent(that,nextSele,"change",function(self,that,e){
-			debugger;
-			changeEvent(self,that,that.preData,e);
-		});
-		that.preData=cell;
+		clear(that.eles,index+1);
+		createdefaultText(that.eles,that.defaultText,index+1);
+		initSele(nextSele,data);
+		addEvent(that,nextSele,"change",eventcallback);
 	}
 	//按照datas嵌套层级获取数据
 	Linkage.prototype.init=_init;
 
-function  l(s,str){console.log(s,str);}
+	function  l(s,str){console.log(s,str);}
 
 	MultiLevelLinkage=new Linkage();
 
