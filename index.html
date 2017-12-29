@@ -35,39 +35,52 @@ var d=document.getElementById("s");
 // 	console.log(18965465,"html")
 // })
 
-							//相同键值后定义会覆盖前定义的
+							//相同键值后定义会覆盖前定义的,多余的cell会被丢弃
 						var data1 = {
-							1000: {text: '蔬菜', value:100,cell: { 10: {text: '菠菜', value: 4 }, 11: {text: '茄子', value: 5} }
+							1: {text: '蔬菜', value:100,cell: { 10: {text: '菠菜', value: 4 }, 11: {text: '茄子', value: 5} }
 							},
-							100: {text: '蔬菜2222', value:100 },
-							20: {text: '水果asd', 
+							2: {text: '蔬菜2', value:100 },
+							3: {text: '水果', 
 								cell: { 
-									20: {text: '苹果', cell: {201: {text: '红富士', value: 20}  } } ,
-									21: {text: '桃', cell: { 210: {text: '猕猴桃', value: 30}, 211: {text: '油桃', value: 31}, 212: {text: '蟠桃', priece: 32} }
+									30: {text: '苹果', cell: {301: {text: '红富士', value: 20}  } } ,
+									31: {text: '桃', cell: { 310: {text: '猕猴桃', value: 30}, 311: {text: '油桃', value: 31}, 312: {text: '蟠桃', value: 32} }
 									}
 								}
 							},
-							300: {text: '粮食',  value:300,
+							4: {text: '粮食',  value:300,
 								cell: { 
-									30: {text: '水稻', 	cell: {	301: {text: '大米', cell: {3001: {text: '五常香米', value: 50}} } } 	} 
+									40: {text: '水稻', 	cell: {	401: {text: '大米', cell: {4001: {text: '五常香米', value: 50}} } } 	} 
 								}
 							}
 						};
 						
+						//没有method默认get,
+						//parameter默认为"",
+						//requestHeader默认为[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
+						//async表示请求是否异步处理。默认是 true。
+						var dataAjax={url:"http://localhost:3000/linkage",
+									  method:"get",
+									  async:"true",
+									  parameter:'key1=value1&key2=value2',
+									  //requestHeader:[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
+									  requestHeader:[]
+									}
 						var opts = {
 								data: data1,
+								//data:dataAjax,
 								//data:{},
 								//按照定义顺序嵌套层级 select数组只能是select 数组 不可以重复  第一个是最上层的select
 								//自动忽略非select  和重复的  至少是一个数组只有一个值
+								//多余的select会被抛弃								
 								select: ["#s",".c",".c2",document.getElementById('d'),".c3",".c4",".c5"]
 						};
 
 var l=MultiLevelLinkage.init(opts);
+
 //MultiLevelLinkage.init(data);
 
 
-// d.onclick=function(){
-// 	console.log(4444,"html")
+// d.onchange=function(){
 // }
 // d.onchange=function(){
 // 	console.log(this.value);
@@ -97,9 +110,11 @@ function addEvent(that,ele,type,fn){
 		}
 	}
 
-// var div=document.querySelector("#d");
-//  div.onclick=function(){
-// 	 d.click();
-//  }
+var div=document.querySelector("#d");
+ div.onclick=function(){
+	//d.click();
+ 	l.getValue(".c")
+	 
+ }
 </script>
 </html>

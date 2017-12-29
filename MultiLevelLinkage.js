@@ -11,16 +11,21 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 		if(!opt.data||!checkObject(opt.data)){throw "请设置data";}
 		if(!opt.select||opt.select.length===0){throw "请设置select";}
 		this.defaultText=opt.defaultText||"请选择";
-		this.datas=opt.data;
-		this.preData;
 		this.eles=getDoc(opt.select);
 		if(this.eles.length===0){throw "没有获取到select";}
 		checkReapet(this);
-		clear(this.eles);
-		createdefaultText(this.eles,this.defaultText);
-		initSele(this.eles[0],this.datas);
-		addEvent(this,this.eles[0],"change",eventcallback);
+		if(opt.data.url){ajax(opt,this);}
+		else{
+			this.datas=opt.data;
+			createSele(this);}
 		return this;
+	}
+	//创建 createSele
+	function createSele(that){
+		clear(that.eles);
+		createdefaultText(that.eles,that.defaultText);
+		initSele(that.eles[0],that.datas);
+		addEvent(that,that.eles[0],"change",eventcallback);
 	}
 	//清空option
 	function clear(ele,end,filter){
@@ -69,7 +74,8 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 	function initSele(ele,datas){
 		for( var k in datas){
 			if (!Object.prototype.hasOwnProperty.call(datas,k)){continue;}
-			if (datas[k]) {fill(ele,datas[k].text,datas[k].value,k);}
+			if(datas[k].text===undefined){throw "数据有误"}
+			if(datas[k]) {fill(ele,datas[k].text,datas[k].value,k);}
 		}
 	}
 	//填充option
@@ -83,9 +89,7 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 			else{throw "重复绑定";}
 		}
 	}
-	function checkObject(obj){for(var k in obj){
-		if (!Object.prototype.hasOwnProperty.call(obj,k)){continue;}return !!obj[k];}
-	}
+	function checkObject(obj){for(var k in obj){if (!Object.prototype.hasOwnProperty.call(obj,k)){continue;}return k.toLocaleLowerCase()==="url"||obj[k].cell;}}
 	//绑定事件
 	function addEvent(that,ele,type,fn){
 		if(ele.addEventListener){
@@ -127,7 +131,6 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 			if(!data){return false;}
 		}
 		return data
-		l(index,data);		
 	}
 	//change事件fn
 	function changeEvent(self,that,datas,e){
@@ -138,15 +141,55 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 		if(!data){clear(that.eles,index+1);
 				  createdefaultText(that.eles,that.defaultText,index+1);
 				  removeEvent(that.eles,index===0?1:index,"change",eventcallback);
+				  return;
 				}
 		clear(that.eles,index+1);
 		createdefaultText(that.eles,that.defaultText,index+1);
 		initSele(nextSele,data);
 		addEvent(that,nextSele,"change",eventcallback);
 	}
-	//按照datas嵌套层级获取数据
-	Linkage.prototype.init=_init;
+	//加载ajax 不兼容IE6,IE7
+	function ajax(opt,that){
+		l(opt.data.parameter[0]!=="?");
+		var data=opt.data,url,str="";
+		var method=data.method.toLocaleUpperCase()||"GET";
+		if(method==="GET"){url=data.url+(data.parameter[0]==="?"?"":"?")+data.parameter;}
+		else{url=data;str=data.parameter;}
+		var xhr=new XMLHttpRequest();
+		xhr.onreadystatechange=function(){
+			if(xhr.readyState==4&&xhr.status==200){
+				//获取数据成功
+				var data=JSON.parse(xhr.responseText);
+				that.datas=data;
+				createSele(that);
+			}
 
+		}
+		xhr.open(method,url,data.async||true);
+		var Header=data.requestHeader&&data.requestHeader.length<0||[{key:'Content-Type',value:'application/x-www-form-urlencoded'}];
+		for (var i= 0; i<Header.length;i++){
+			xhr.setRequestHeader(Header[i].key,Header[i].value);
+		}
+		xhr.send(str);
+	}
+//获取select的值
+function _getValue(str){
+	var val=[];
+	if(!str){
+		for (var i= 0;i< this.eles.length; i++) {
+			if(this.eles[i].options.length>1){
+				if(this.eles[i].value===this.defaultText){continue;}val.push(this.eles[i].value);}	
+		}
+	}else if(typeof str=="string"){
+		var select=getDoc([str]);
+		l(select,"select")
+	}
+	l(val)
+	
+	return val;
+}
+	Linkage.prototype.init=_init;
+	Linkage.prototype.getValue=_getValue;
 	function  l(s,str){console.log(s,str);}
 
 	MultiLevelLinkage=new Linkage();
