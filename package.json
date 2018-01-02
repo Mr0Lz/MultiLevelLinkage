@@ -1,0 +1,27 @@
+{
+  "name": "multilevellinkage",
+  "version": "1.0.0",
+  "description": "使用:\r   1.引入js文件",
+  "main": "MultiLevelLinkage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mr0Lz/MultiLevelLinkage.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mr0Lz/MultiLevelLinkage/issues"
+  },
+  "homepage": "https://github.com/Mr0Lz/MultiLevelLinkage#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0"
+  }
+}
