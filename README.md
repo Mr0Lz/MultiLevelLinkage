@@ -13,27 +13,22 @@
    
   3.配置插件
    设置opt对象配置插件
-   `opts.data`只能定义一个,本地数据对象和AJAX数据对象只能存在一个,data长度大于select的长度,多余的data会被抛弃
    
    
-   
-   `opts.select`是一组select数组,按照定义顺序嵌套层,select数组只能是select的对象,数组不可以重复,第一个是最上层的select,自动忽略非select对象和重复的,至少是数组只有一个值,data的长度小于select的长度,多余的select会被不启用
-   
-   
-   `opts.defaultText` 自定义提示文字,默认为"请选择"
+`opts.data`只能定义一个,本地数据对象和AJAX数据对象只能存在一个,data长度大于select的长度,多余的data会被抛弃
    
    
-   
-   
+`opts.select`是一组select数组,按照定义顺序嵌套层,select数组只能是select的对象,数组不可以重复,第一个是最上层的select,自动忽略非select对象和重复的,至少是数组只有一个值,data的长度小于select的长度,多余的select会被不启用
+
+`opts.defaultText` 自定义提示文字,默认为"请选择"
+
+例子:
   
      var opts = {
-     data: data
-     //按照定义顺序嵌套层级 select数组只能是select 数组 不可以重复  第一个是最上层的select
-     //自动忽略非select  和重复的  至少是一个数组只有一个值
-     //多余的select会被抛弃								
+     data: data			
      select: ["#s",".c",".c2",".c3",".c4",".c5"],
-     defaultText:"defaultText"//自定义提示文字
-    };
+     defaultText:"defaultText"
+     };
   
   
   
