@@ -6,11 +6,11 @@
     
   2.设置插件
   
-    //相同键值后定义会覆盖前定义的,多余的cell会被丢弃
-    //text对应option的text,value对应option的value,
-    //value和cell可以不定义,text会代替value
-    //除了value,text,cell以外可以自定义自己需要的属性,
-    //getValue会返回选中的value,和其他绑定的属性
+  //相同键值后定义会覆盖前定义的,多余的cell会被丢弃
+  //text对应option的text,value对应option的value,
+  //value和cell可以不定义,text会代替value
+  //除了value,text,cell以外可以自定义自己需要的属性,
+  //getValue会返回选中的value,和其他绑定的属性
     var data = {
     1: {text: '蔬菜', value:100,cell: { 10: {text: '菠菜', value: 4 }, 11: {text: '茄子', value: 5} }
     },
