@@ -21,6 +21,10 @@
    
    
    `opts.defaultText` 自定义提示文字,默认为"请选择"
+   
+   
+   
+   
   
      var opts = {
      data: data
