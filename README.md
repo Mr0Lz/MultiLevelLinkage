@@ -1,12 +1,39 @@
 # MultiLevelLinkage
-## 多级联动select插件,不依赖JQuery,可在IE8以及主流的浏览器中使用,简单易用体积小
+## 多级联动select插件,不依赖JQuery,可在IE8以及主流的浏览器中使用
   使用:
   1.引入js文件
   
     <script type="text/javascript" src="MultiLevelLinkage.js"></script>
     
-  2.设置插件
-  数据的结构:
+  2.在html中写select标签,插件可以用id,css等可以选中select的选择器
+  
+  
+  	<select id="s" class="c"></select>
+   
+   
+  3.配置插件
+   设置opt对象配置插件
+   opts.data        只能定义一个,本地数据对象和AJAX数据对象只能存在一个,
+                    data长度大于select的长度,多余的data会被抛弃
+   opts.select      是一组select数组,按照定义顺序嵌套层,select数组只能是select的对象,
+                    数组不可以重复,第一个是最上层的select,自动忽略非select对象和重复的,
+                    至少是数组只有一个值,data的长度小于select的长度,多余的select会被不启用
+   opts.defaultText 自定义提示文字,默认为"请选择"
+  
+     var opts = {
+     data: data
+     //按照定义顺序嵌套层级 select数组只能是select 数组 不可以重复  第一个是最上层的select
+     //自动忽略非select  和重复的  至少是一个数组只有一个值
+     //多余的select会被抛弃								
+     select: ["#s",".c",".c2",".c3",".c4",".c5"],
+     defaultText:"defaultText"//自定义提示文字
+    };
+  
+  
+  
+  
+  
+  opts.data数据的结构:
  
     //相同键值后定义会覆盖前定义的,多余的cell会被丢弃
     //text对应option的text,value对应option的value,
@@ -32,3 +59,21 @@
         }
      }
     };
+    
+AJAX的数据:
+
+
+
+    //没有method默认get,
+    //parameter默认为"",
+    //requestHeader默认为[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
+    //async表示请求是否异步处理。默认是 true。
+    var dataAjax={url:"http://localhost:3000/linkage",
+       method:"get",
+       async:"true",
+       parameter:'key1=value1&key2=value2',
+       //requestHeader:[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
+       requestHeader:[]
+      }    
+     
+   
