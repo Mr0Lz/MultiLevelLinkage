@@ -23,15 +23,14 @@
 `opts.defaultText` 自定义提示文字,默认为"请选择"
 
 例子:
-  
-` var opts = {
- data: data,
- select: ["#s",".c",".c2",".c3",".c4",".c5"],
- defaultText:"defaultText"
- };`
+
+    var opts = {
+    data: data,
+    select: ["#s",".c",".c2",".c3",".c4",".c5"],
+    defaultText:"defaultText"
+    };
   
-  
-  opts.data数据的结构:
+opts.data数据的结构:
  
     //相同键值后定义会覆盖前定义的,多余的cell会被丢弃
     //text对应option的text,value对应option的value,
