@@ -5,7 +5,6 @@ if(isIE(6)||isIE(7)){
 }
 if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/){ var len = this.length >>> 0; var from = Number(arguments[1]) || 0; from = (from < 0) ? Math.ceil(from) : Math.floor(from); if (from < 0) from += len; for (; from < len; from++) { if (from in this && this[from] === elt) return from; } return -1; }; }
 	function Linkage(){
-
 	}
 	function _init(opt){
 		if(!opt.data||!checkObject(opt.data)){throw "请设置data";}
@@ -20,7 +19,7 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 			createSele(this);}
 		return this;
 	}
-	//创建 createSele
+	//创建 Select
 	function createSele(that){
 		clear(that.eles);
 		createdefaultText(that.eles,that.defaultText);
@@ -185,7 +184,6 @@ function _getValue(str){
 			if(this.eles[i].options.length>1){
 				if(this.eles[i].value===this.defaultText){continue;}o.value=this.eles[i].value;
 				var key=this.eles[i].options[this.eles[i].selectedIndex].getAttribute("d-k");
-				debugger
 				if(key!==""){
 					o.bindData=getOptionData(this,i,this.datas,key);
 				}
@@ -208,8 +206,6 @@ function _getValue(str){
 }
 	Linkage.prototype.init=_init;
 	Linkage.prototype.getValue=_getValue;
-
 	MultiLevelLinkage=new Linkage();
-
 })
 (window,document)

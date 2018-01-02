@@ -20,45 +20,50 @@
 <script type="text/javascript" src="MultiLevelLinkage.js"></script>
 <script type="text/javascript">
 
-							//相同键值后定义会覆盖前定义的,多余的cell会被丢弃
-						var data1 = {
-							1: {text: '蔬菜', value:100,cell: { 10: {text: '菠菜', value: 4 }, 11: {text: '茄子', value: 5} }
-							},
-							2: {text: '蔬菜2', value:100 },
-							3: {text: '水果', 
-								cell: { 
-									30: {text: '苹果', cell: {301: {text: '红富士', value: 20}  } } ,
-									31: {text: '桃', cell: { 310: {text: '猕猴桃', value: 30}, 311: {text: '油桃', value: 31}, 312: {text: '蟠桃', value: 32} }
-									}
-								}
-							},
-							4: {text: '粮食',  value:300,
-								cell: { 
-									40: {text: '水稻', 	cell: {	401: {text: '大米', cell: {4001: {text: '五常香米', value: 50}} } } 	} 
-								}
-							}
-						};
-						
-						//没有method默认get,
-						//parameter默认为"",
-						//requestHeader默认为[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
-						//async表示请求是否异步处理。默认是 true。
-						var dataAjax={url:"http://localhost:3000/linkage",
-									  method:"get",
-									  async:"true",
-									  parameter:'key1=value1&key2=value2',
-									  //requestHeader:[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
-									  requestHeader:[]
-									}
-						var opts = {
-								data: data1,
-								//data:dataAjax,
-								//data:{},
-								//按照定义顺序嵌套层级 select数组只能是select 数组 不可以重复  第一个是最上层的select
-								//自动忽略非select  和重复的  至少是一个数组只有一个值
-								//多余的select会被抛弃								
-								select: ["#s",".c",".c2",".c3",".c4",".c5"]
-						};
+//相同键值后定义会覆盖前定义的,多余的cell会被丢弃
+//text对应option的text,value对应option的value,
+//value和cell可以不定义,text会代替value
+//除了value,text,cell以外可以自定义自己需要的属性,
+//getValue会返回选中的value,和其他绑定的属性
+var data = {
+1: {text: '蔬菜', value:100,cell: { 10: {text: '菠菜', value: 4 }, 11: {text: '茄子', value: 5} }
+},
+2: {text: '肉', value:100 },
+3: {text: '水果', 
+	cell: { 
+		30: {text: '苹果', cell: {301: {text: '红富士', value: 20}  } } ,
+		31: {text: '桃', cell: { 310: {text: '猕猴桃', value: 30}, 311: {text: '油桃', value: 31}, 312: {text: '蟠桃', value: 32} }
+		}
+	}
+},
+4: {text: '粮食',  value:300,
+	cell: { 
+		40: {text: '水稻', 	cell: {	401: {text: '大米', cell: {4001: {text: '五常香米', value: 50}} } } 	} 
+	}
+}
+};
+
+//没有method默认get,
+//parameter默认为"",
+//requestHeader默认为[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
+//async表示请求是否异步处理。默认是 true。
+var dataAjax={url:"http://localhost:3000/linkage",
+			method:"get",
+			async:"true",
+			parameter:'key1=value1&key2=value2',
+			//requestHeader:[{key:'Content-Type',value:'application/x-www-form-urlencoded'}],
+			requestHeader:[]
+		}
+var opts = {
+	//data: data,
+	data:dataAjax,
+	//data:{},
+	//按照定义顺序嵌套层级 select数组只能是select 数组 不可以重复  第一个是最上层的select
+	//自动忽略非select  和重复的  至少是一个数组只有一个值
+	//多余的select会被抛弃								
+	select: ["#s",".c",".c2",".c3",".c4",".c5"],
+	defaultText:"defaultText"//自定义提示文字
+};
 
 var select=MultiLevelLinkage.init(opts);
 var button=document.getElementById("button")
@@ -66,8 +71,8 @@ button.onclick=function(){
 	//返回值{value:null,bindData:null}
 	//getValue方法默认不带参数返回数组,数组包括全部select选中的value和与其绑定的data
 	//带参数,参数为querystring 用来选中单独的select,返回一个对象,对象包括select选中的value和与其绑定的data
-	console.log(select.getValue());
-	console.log(select.getValue("#s"));
+	console.log(select.getValue());//返回数组
+	console.log(select.getValue("#s"));//返回对象
 }
 </script>
 </html>
