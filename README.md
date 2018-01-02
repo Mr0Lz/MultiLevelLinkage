@@ -24,14 +24,11 @@
 
 例子:
   
-     var opts = {
-     data: data			
-     select: ["#s",".c",".c2",".c3",".c4",".c5"],
-     defaultText:"defaultText"
-     };
-  
-  
-  
+` var opts = {
+ data: data,
+ select: ["#s",".c",".c2",".c3",".c4",".c5"],
+ defaultText:"defaultText"
+ };`
   
   
   opts.data数据的结构:
