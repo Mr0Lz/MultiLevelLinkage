@@ -6,34 +6,19 @@
 </head>
 <body>
 	<select id="s" class="c">
-		<option>2121231231</option>
 	</select>
 	<select  class="c2">
-		<option>2121231231</option>
 	</select>
 	<select  class="c3">
-		<option>2121231231</option>
 	</select>
 	<select  class="c4">
-		<option>2121231231</option>
 	</select>
 	<select  class="c5">
-		<option>2121231231</option>
 	</select>
-	<div id="d">sadfasfsadfasd</div>
+	<button id="button">button</button>
 </body>
 <script type="text/javascript" src="MultiLevelLinkage.js"></script>
 <script type="text/javascript">
-var d=document.getElementById("s");
-// d.onclick=function(){
-// 	console.log(333,"html")
-// }
-// d.onclick=function(){
-// 	console.log(5555,"html")
-// }
-// addEvent({},d,"click",function(){
-// 	console.log(18965465,"html")
-// })
 
 							//相同键值后定义会覆盖前定义的,多余的cell会被丢弃
 						var data1 = {
@@ -72,49 +57,17 @@ var d=document.getElementById("s");
 								//按照定义顺序嵌套层级 select数组只能是select 数组 不可以重复  第一个是最上层的select
 								//自动忽略非select  和重复的  至少是一个数组只有一个值
 								//多余的select会被抛弃								
-								select: ["#s",".c",".c2",document.getElementById('d'),".c3",".c4",".c5"]
+								select: ["#s",".c",".c2",".c3",".c4",".c5"]
 						};
 
-var l=MultiLevelLinkage.init(opts);
-
-//MultiLevelLinkage.init(data);
-
-
-// d.onchange=function(){
-// }
-// d.onchange=function(){
-// 	console.log(this.value);
-// 	console.log(this);
-// }
-// addEvent({},d,"click",function(){
-// 	console.log(0000,"html")
-// })
-
-// addEvent({},d,"click",function(){
-// 	console.log(11111,"html")
-// })
-
-function addEvent(that,ele,type,fn){
-		if(ele.addEventListener){
-			ele.addEventListener(type,function(e){
-				var e=e||window.event;
-				console.log(e,"32","html");
-				fn();
-			},false);
-		}else if(ele.attachEvent){
-			ele.attachEvent("on"+type,function(e){
-				var e=e||window.event;
-				console.log(e,"ie","html");
-				fn();
-			});
-		}
-	}
-
-var div=document.querySelector("#d");
- div.onclick=function(){
-	//d.click();
- 	l.getValue(".c")
-	 
- }
+var select=MultiLevelLinkage.init(opts);
+var button=document.getElementById("button")
+button.onclick=function(){
+	//返回值{value:null,bindData:null}
+	//getValue方法默认不带参数返回数组,数组包括全部select选中的value和与其绑定的data
+	//带参数,参数为querystring 用来选中单独的select,返回一个对象,对象包括select选中的value和与其绑定的data
+	console.log(select.getValue());
+	console.log(select.getValue("#s"));
+}
 </script>
 </html>

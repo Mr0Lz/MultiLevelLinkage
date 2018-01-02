@@ -130,7 +130,13 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 			data=data[key].cell;
 			if(!data){return false;}
 		}
-		return data
+		return data;
+	}
+	//获取option数据
+	function  getOptionData(that,index,data,key){
+		var d;
+		if(index===0){return data[key];}
+		else{d=getData(index,that);return d;}
 	}
 	//change事件fn
 	function changeEvent(self,that,datas,e){
@@ -150,7 +156,6 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 	}
 	//加载ajax 不兼容IE6,IE7
 	function ajax(opt,that){
-		l(opt.data.parameter[0]!=="?");
 		var data=opt.data,url,str="";
 		var method=data.method.toLocaleUpperCase()||"GET";
 		if(method==="GET"){url=data.url+(data.parameter[0]==="?"?"":"?")+data.parameter;}
@@ -163,7 +168,6 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 				that.datas=data;
 				createSele(that);
 			}
-
 		}
 		xhr.open(method,url,data.async||true);
 		var Header=data.requestHeader&&data.requestHeader.length<0||[{key:'Content-Type',value:'application/x-www-form-urlencoded'}];
@@ -175,22 +179,35 @@ if (!Array.prototype.indexOf){ Array.prototype.indexOf = function(elt /*, from*/
 //获取select的值
 function _getValue(str){
 	var val=[];
-	if(!str){
+	if(str===undefined){
 		for (var i= 0;i< this.eles.length; i++) {
+			var o={value:null,bindData:null};
 			if(this.eles[i].options.length>1){
-				if(this.eles[i].value===this.defaultText){continue;}val.push(this.eles[i].value);}	
+				if(this.eles[i].value===this.defaultText){continue;}o.value=this.eles[i].value;
+				var key=this.eles[i].options[this.eles[i].selectedIndex].getAttribute("d-k");
+				debugger
+				if(key!==""){
+					o.bindData=getOptionData(this,i,this.datas,key);
+				}
+				val.push(o);						
+			}
 		}
+		return val;
 	}else if(typeof str=="string"){
-		var select=getDoc([str]);
-		l(select,"select")
+		var select=getDoc([str]),o={value:null,bindData:null};
+		if(select.length===0){return "没了选中select";}
+		if(select[0].value!==this.defaultText){
+			o.value=select[0].value;
+	  	 }
+		var key=select[0].options[select[0].selectedIndex].getAttribute("d-k");
+		if(key!==""){
+			o.bindData=getOptionData(this,this.eles.indexOf(select[0]),this.datas,key);
+		}
+		return o;
 	}
-	l(val)
-	
-	return val;
 }
 	Linkage.prototype.init=_init;
 	Linkage.prototype.getValue=_getValue;
-	function  l(s,str){console.log(s,str);}
 
 	MultiLevelLinkage=new Linkage();
 
