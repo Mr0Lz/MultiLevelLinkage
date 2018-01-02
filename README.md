@@ -25,9 +25,9 @@
 例子:
 
     var opts = {
-    data: data,
-    select: ["#s",".c",".c2",".c3",".c4",".c5"],
-    defaultText:"defaultText"
+     data: data,
+     select: ["#s",".c",".c2",".c3",".c4",".c5"],
+     defaultText:"defaultText"
     };
   
 opts.data数据的结构:
@@ -73,4 +73,17 @@ AJAX的数据:
        requestHeader:[]
       }    
      
-   
+ 
+调用MultiLevelLinkage对象的init方法把`opts`传进去就可以了
+`var Linkage=MultiLevelLinkage.init(opts);`
+
+getValue方法
+
+
+
+
+    //返回值{value:null,bindData:null}
+    //getValue方法默认不带参数返回数组,数组包括全部select选中的value和与其绑定的data
+    //带参数,参数为querystring 用来选中单独的select,返回一个对象,对象包括select选中的value和与其绑定的data
+    Linkage.getValue()//返回数组
+    select.getValue("#s")//返回对象
